@@ -1,0 +1,10 @@
+the source files are commented.  look through those for a general idea of how
+things work and what we have to do.
+
+Our priorities include:
+-clean up all the code/reorganize the design
+-optimize
+-fix bugs
+-improve
+-optimize
+-re-theme
