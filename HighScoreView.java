@@ -1,3 +1,14 @@
+/****************************************************
+ * this activity shows the high scores. 
+ * you can get here by finishing a game or from the home screen
+ * 
+ * it uses the scoreninja api
+ * 
+ * this is pretty self-explanatory but very badly written and probably has bugs
+ * 
+ * at the very least we should make it more organized
+ */
+
 package com.schen.pop;
 
 import java.util.Arrays;

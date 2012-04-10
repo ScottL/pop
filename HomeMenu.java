@@ -1,3 +1,10 @@
+/*******************************************************************
+ * this is the activity of the home menu
+ * this is just a lot of stupid UI stuff.. you don't have to worry about 
+ * most of it yet. we probably won't change much of this
+
+*/
+
 package com.schen.pop;
 
 import android.app.Activity;

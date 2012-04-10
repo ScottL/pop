@@ -1,3 +1,12 @@
+/*******************************************************
+ * This is the actual View that the game is in.  It is displayed
+ * within PopActivity.
+ * 
+ * This is the main class of the game.  It takes care of physics/graphics/sound/state/etc.
+ *************** We should break this up into more classes.
+ * 
+ */
+
 package com.schen.pop;
 
 import java.io.IOException;
@@ -53,8 +62,12 @@ public class PopView extends SurfaceView implements SurfaceHolder.Callback {
 	static final byte KIDS = 2;
 	boolean playSound = false;
 	
+	//this is an inner class that is the main thread of the game. it controls the functions and state of the game
 	class PopThread extends Thread {
 		
+		//all of the memory has to be allocated before the game starts running!!
+		//we should still fix this though; there are too many variables in one place
+		//also.. you have to use things like bytes and anything else like that to save memory (static, final etc)
 		Bitmap sky;
 		Bitmap earth;
 		int skyWidth, skyHeight, earthWidth, earthHeight;
@@ -149,6 +162,7 @@ public class PopView extends SurfaceView implements SurfaceHolder.Callback {
 		static final String BK_LIVES = "lives";
 		static final String HF = "hf";
 		static final String TST = "tst";
+		//all these stupid constants should be in a constants class with static access
 		static final String TSTSTRING = "tstString";
 		static final String VL = "vl";
 		static final String YESLIVES = "yeslives";
@@ -198,13 +212,16 @@ public class PopView extends SurfaceView implements SurfaceHolder.Callback {
 		Resources res;
 		Handler handler;
 		Handler handlerShit;
+		//all the loop counters cause even allocating an integer during play is bad
 		int foo, ctr, lawl, i1, i2, i3, i4, a, xy, g = ZERO, mn, randCtr, randLength;
 		double ab;
 		byte FPS = 17;	//58 fps
 		Paint fontPaint, fontPaint2, pausePaint, backPaint;
 		Canvas c;
 		int blue = Color.rgb(30, 150, 255);
+		//this is the main thread's constructor
 		public PopThread(Context context, SurfaceHolder surface_holder, int theme, Handler handler, Handler h2, PopView pop) {
+			//this initializes the game on startup
 			this.surfaceHolder = surface_holder;
 			this.context = context;
 			this.handler = handler;
@@ -235,6 +252,7 @@ public class PopView extends SurfaceView implements SurfaceHolder.Callback {
 				afd = am.openFd("sounds/item.ogg");
 				idItem = soundPool.load(afd, 1);
 			} catch (IOException e) {
+				//there should be something here.
 			}
 			randomWidth = (int)(screenWidth - spriteWidth);
 			spriteListStart = ZERO;
@@ -278,6 +296,9 @@ public class PopView extends SurfaceView implements SurfaceHolder.Callback {
 			drawEarthPos = screenHeight - correctY;
 			earth = Bitmap.createScaledBitmap(earth, screenWidth, correctY, false);
 		}
+		
+		//this is to set up the game for different screen sizes.  
+		//we need to add something that also changes the size of the objects.. im fuckin retarded and forgot..
 		public void setup() {
 			if (screenHeight <= 480) {
 				SPEED_SLOW = THREE;
@@ -308,6 +329,7 @@ public class PopView extends SurfaceView implements SurfaceHolder.Callback {
 			}
 		}
 		
+		//pretty obvious.. sets some game constants based on difficulty
 		public void setDifficulty(byte n) {
 			if (n == PopView.ORIG) {
 				this.xBUBBLE = 0.72f;
@@ -335,6 +357,8 @@ public class PopView extends SurfaceView implements SurfaceHolder.Callback {
 			}
 		}
 		
+		//idk mbe this updates graphics or physics? dur dur
+		//we do need to reimplement this though.. the sound is slow
 		public void updateSound() {
 			if (playAlien == ONE) {
 				pv.post(new Runnable() {
@@ -355,13 +379,19 @@ public class PopView extends SurfaceView implements SurfaceHolder.Callback {
 			}
 		}
 		
+		//the run method of the thread.  if you don't know about threads, this is basically the main method of the thread
+		//its what happens when the thread is started.. so whatever happens in here can happen while the rest of the program runs
 		public void run() {
+			//clean everything up one last time before starting
 			System.gc();
+			//keep the thread alive until the game ends
+			//this is the main loop of the game, and each iteration updates the state,physics,graphics, sound
 			while (run) {
 				c = null;
 				try {
 					c = surfaceHolder.lockCanvas(null);
 					synchronized (surfaceHolder) {
+						//handling the states of the game.. this should be simplified/rearranged
 						if (state == STATE_RUNNING) {
 							if (textStopCtr < TEXT_STOP) textStopCtr++;
 							if (STATUS_SLOW == ONE) {
@@ -401,6 +431,7 @@ public class PopView extends SurfaceView implements SurfaceHolder.Callback {
 							}
 							iter++;
 							if (iter > X10K) {iter = ZERO;}
+							//i think this spawns new sprites
 							if (iter % spawnRate == ZERO) {
 								ab = random[randCtr++];
 								tempSprite = sprites[spriteListEnd];
@@ -422,23 +453,29 @@ public class PopView extends SurfaceView implements SurfaceHolder.Callback {
 								sprites[spriteListEnd] = tempSprite; spriteListEnd++;
 								if (spriteListEnd >= sprites.length) spriteListEnd = ZERO;	//TODO: how to wrap when iterating in update methods?!?!?!?!
 								if (spriteListEnd == spriteListStart) {spriteListStart++;}	//WHY THE FUCK DOESNT THIS SHIT WORK:?????
+								//^^^LOL that comment there.. i cant believe i left it in when i published.... im sure i publish something when theres a comment
+								//that says it doesnt work..
 							}
+							//update everything once in one run through the main loop of the game
 							updateState();
 							updatePhysics();
 							now2 = System.currentTimeMillis();
 							elapsed2 = (now2 - lastTime2);
+							//this keeps the frame rate steady so the speed of the game isn't dependent on the speed of the computer
 							while (elapsed2<FPS) {
 								now2 = System.currentTimeMillis();
 								elapsed2 = now2 - lastTime2;
 							}
 							lastTime2 = now2;
 						}
+						//idk..
 						if (!gone) updateGraphics2(c);
 					}
 				} finally {if (c != null) surfaceHolder.unlockCanvasAndPost(c);}
 			}
 		}
 		
+		//loads the theme..
 		public void loadTheme(int theme) {
 			if (theme == ZERO) {
 				bitmaps[ZERO] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(res, R.drawable.bubble), (int)spriteWidth, (int)spriteWidth, FALSE);
@@ -455,6 +492,8 @@ public class PopView extends SurfaceView implements SurfaceHolder.Callback {
 			}
 		}
 		public void setState(byte state) {this.state = state;}
+		
+		//this needs to be re-done. high priority
 		public void updateState() {
 				sendL = ZERO;
 				sendS = ZERO;
@@ -583,6 +622,7 @@ public class PopView extends SurfaceView implements SurfaceHolder.Callback {
 				}
 		}
 		
+		//main physics method. we need a better algorithm.. this one is shit
 		public void updatePhysics() {
 			if (spriteListStart <= spriteListEnd) {
 				for (a = spriteListStart; a < spriteListEnd; a++) {	//0
@@ -635,6 +675,9 @@ public class PopView extends SurfaceView implements SurfaceHolder.Callback {
 			}
 		}
 		
+		// a hack method to keep the objects on the screen from acting retarded when the game is paused.
+		// we should find a way to make it more elegant but this method is short so this isn't that high
+		// on our list of things to do
 		public void drawPaused(Canvas canvas) {
 			synchronized (surfaceHolder) {
 				canvas.drawRect(new Rect(ZERO, ZERO, screenWidth, screenHeight), pausePaint);
@@ -644,6 +687,7 @@ public class PopView extends SurfaceView implements SurfaceHolder.Callback {
 			}
 		}
 		
+		//no idea why this is updateGraphics2.. kinda creepy.. is there an updateGraphics1.....
 		public void updateGraphics2(Canvas canvas) {
 			synchronized (surfaceHolder) {
 				canvas.drawRect(new Rect(ZERO, drawSkyEnd, screenWidth, screenHeight), backPaint);
@@ -670,6 +714,9 @@ public class PopView extends SurfaceView implements SurfaceHolder.Callback {
 			}
 		}
 		
+		//get the input from the user.. this is the only updateX() method that isn't in the main thread, cause we
+		//have no idea when the user will give input
+		//also this is much too long
 		public void updateInput(int num, MotionEvent e) {
 			if (state != STATE_RUNNING) return;
 			if (spriteListStart <= spriteListEnd) {
@@ -854,13 +901,17 @@ public class PopView extends SurfaceView implements SurfaceHolder.Callback {
 				}
 			}
 		}
+		//some stupid hack method but its one line so w/e
 		public Bitmap getBitmapForIV() {
 			return btt;
 		}
+		//start the thread
 		public void doStart() {synchronized (surfaceHolder) {setState(STATE_RUNNING); setRunning(TRUE);}}
+		//also start the thread.. wtf
 		public void setRunning(boolean b) {run = b;}
 	}	//end embedded thread class
 	
+	//this starts the actual PopView.java class. everything else was the thread class
 	static PopThread thread;
 	Typeface type;
 	int lal;
@@ -897,6 +948,9 @@ public class PopView extends SurfaceView implements SurfaceHolder.Callback {
 	static final String TSTSTRING = "tstString";
 	static final CharSequence X = "";
 	
+	//this is the View that the game is in.  A view is just a UI component like a button, canvas(for drawing), text box, etc
+	//so the physics and state stuff are done in the inner thread class and displayed on this view class, which is running
+	//inside the PopActivity class
 	public PopView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		SurfaceHolder holder = getHolder();
@@ -906,6 +960,7 @@ public class PopView extends SurfaceView implements SurfaceHolder.Callback {
 		type = Typeface.createFromAsset(getContext().getAssets(), "fonts/font.ttf");
 		vibrator = (Vibrator)contextForView.getSystemService(Context.VIBRATOR_SERVICE);
 		this.setHapticFeedbackEnabled(TRUE);
+		//get the thread ready
 		thread = new PopThread(context, holder, ZERO, new Handler() {
 			@Override
 			public void handleMessage(Message m) {

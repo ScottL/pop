@@ -1,3 +1,12 @@
+/*******************************************************
+ * This class is a remade Preferences class.
+ * It provides static methods to access preferences so the
+ * other classes don't have to mess around with retarded preferences
+ * code.
+ * 
+ * its pretty self-explanatory..
+ */
+
 package com.schen.pop;
 
 import android.content.Context;

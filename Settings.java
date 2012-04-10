@@ -1,3 +1,18 @@
+/*************************************************************
+ * This class takes care of scoring and high scores, its name
+ * should be changed....
+ * 
+ * The code for this class is absolutely shitty.  It has multiple
+ * bugs that I actually know about but was too lazy to fix.
+ * 
+ * *****we should rewrite this immediately*****
+ * 
+ * also this is a good class for you to write cause it doesn't
+ * have much to do with Android itself except for the files
+ * but that is obvious stuff
+ * 
+ */
+
 package com.schen.pop;
 
 import java.io.BufferedWriter;
@@ -51,7 +66,10 @@ public class Settings {
 			} catch (FileNotFoundException e) {hasES = false;}
 		}
 		if (hasES == false) {
-			for (int i = 0; i < 10; i++) {scores[i] = Preferences.getScore(context, i, diff);}
+			try {	//just added
+				for (int i = 0; i < 10; i++) {scores[i] = Preferences.getScore(context, i, diff);}
+			}
+			catch (Exception e) {e.printStackTrace();}	//just added try catch
 		}
 		return scores;
 	}

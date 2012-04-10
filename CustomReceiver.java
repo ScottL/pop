@@ -1,3 +1,5 @@
+//this class handles things like if the battery low thing pops up.
+//we also need to handle calls and texts and w/e
 package com.schen.pop;
 
 import android.content.BroadcastReceiver;

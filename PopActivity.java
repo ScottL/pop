@@ -1,3 +1,9 @@
+/**************************************************************
+ * This activity is the activity that holds the PopView view.
+ * It is the activity that is on when the game is being played
+ * 
+ */
+
 package com.schen.pop;
 
 import android.app.Activity;
@@ -29,6 +35,7 @@ public class PopActivity extends Activity {
 	
 	static boolean gone = false;
 	
+	//onCreate is the first method that is called when an Android Activity is started.. its like a constructor for a java class
 	@Override
 	public void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
@@ -47,16 +54,21 @@ public class PopActivity extends Activity {
 		iViews[1] = lives2;
 		iViews[2] = lives3;
 		
+		//get the view ready
 		pop_view = (PopView)findViewById(R.id.pv);
+		//give the view a handle to this activity
 		pop_view.setActivity(this);
 		pop_view.setTextViews(scoreView);
 		pop_view.setImageViews(iViews);
+		//get a handle to the games thread
 		popThread = pop_view.getThread();
 		System.gc();
 	}
 	
 	public static void PAUSE_FROM_BROADCAST_RECEIVER_ONLY() {popThread.setState(PopThread.STATE_PAUSED);}
 	
+	//these next few methods just take care of activity stuff. like what happens when the user presses home
+	//or back or search during the game
 	@Override
 	public boolean onSearchRequested() {return false;}
 	

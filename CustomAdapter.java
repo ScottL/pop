@@ -1,3 +1,9 @@
+/******************************************
+ * This is a custom list for the High Scores view.
+ * 
+ * We can probably get rid of it..
+ */
+
 package com.schen.pop;
 
 import android.content.Context;
