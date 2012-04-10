@@ -33,15 +33,8 @@ public class HomeMenu extends Activity {
 	Button play_b, hs_b, th_b, opt_b, help_b, exit_b;
 	PopView pop_view;
 	Typeface typeface;
-	Dialog id1;
- 	Dialog id3;
- 	Dialog id4;
- 	Button next1;
- 	Button back1;
- 	Button back3;
- 	Button next3;
- 	Button back4;
- 	Button play4, soundB;
+	Dialog id1, id3, id4;
+ 	Button next1, back1, back3, next3, back4, play4, soundB;
  	CheckBox cb4;
 	static boolean gone = false;
 	
@@ -57,20 +50,7 @@ public class HomeMenu extends Activity {
         spe.commit();
         setContentView(R.layout.main);
         
-        RelativeLayout layout = (RelativeLayout)findViewById(R.id.main_rl);
-        
-        // Create the adView
-        // Please replace MY_BANNER_UNIT_ID with your AdMob Publisher ID
-        AdView adView = new AdView(this, AdSize.BANNER,"a14e0a45f64da63");
-      
-        // Add the adView to it
-        layout.addView(adView);
-         
-        // Initiate a generic request to load it with an ad
-        AdRequest request = new AdRequest();
-        request.setTesting(true);
-
-        adView.loadAd(request);
+        /* i got rid of all ads for now; the API is probably completely updated now anyways */
         
         Preferences.setFromGame(this, 0);
         typeface = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/font.ttf");
@@ -179,6 +159,7 @@ public class HomeMenu extends Activity {
     	startActivity(prefs);
     }
     
+    /* this handles the instruction sequence */
     public void showInstructions() {
     	id1 = new Dialog(this) {
 			public boolean onSearchRequested() {
@@ -260,6 +241,7 @@ public class HomeMenu extends Activity {
 		return true;
 	}
 	
+    /* to send the devs an email */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.report_bug) {
@@ -274,8 +256,7 @@ public class HomeMenu extends Activity {
 	}
 	
 	@Override
-	public void onStop()
-	{
+	public void onStop() {
 	   super.onStop();
 	   FlurryAgent.onEndSession(this);
 	}

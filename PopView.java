@@ -121,6 +121,7 @@ public class PopView extends SurfaceView implements SurfaceHolder.Callback {
 		static final int X10K = 10000;
 		final int bitmapsLength = bitmaps.length;
 		final int spritesLength = sprites.length;
+		//this mbe shouldnt be constant because sprite size is variable
 		static final byte Y_START = -20;
 		static final byte STATE_LOSE = 1, STATE_PAUSED = 2, STATE_RUNNING = 4;
 		static final byte heightRatio = 6;	//bigger = smaller sprites; smaller = bigger sprites
@@ -297,9 +298,22 @@ public class PopView extends SurfaceView implements SurfaceHolder.Callback {
 			earth = Bitmap.createScaledBitmap(earth, screenWidth, correctY, false);
 		}
 		
+		public void setupForDevice() {
+			
+		}
+		
+		public void setupGraphics() {
+			
+		}
+		
+		public void setupSound() {
+			
+		}
+		
 		//this is to set up the game for different screen sizes.  
 		//we need to add something that also changes the size of the objects.. im fuckin retarded and forgot..
 		public void setup() {
+			//should also initialize all sprites' widths here - gsiano
 			if (screenHeight <= 480) {
 				SPEED_SLOW = THREE;
 				SPEED_MED = FOUR;

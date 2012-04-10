@@ -25,8 +25,8 @@ public class Preferences extends PreferenceActivity {
 	        super.onCreate(savedInstanceState);
 	        addPreferencesFromResource(R.xml.preferences);
 	        PreferenceManager pm = this.getPreferenceManager();
-	        Log.d("greg", "greg: " + Preferences.getInstructions(getApplicationContext()));
-	        Log.d("greg", "greg: " + Preferences.getInstructions(getBaseContext()));
+	        //Log.d("greg", "greg: " + Preferences.getInstructions(getApplicationContext()));
+	        //Log.d("greg", "greg: " + Preferences.getInstructions(getBaseContext()));
 	        instCB = (CheckBoxPreference)pm.findPreference("instructions");
 	        soundCB = (CheckBoxPreference)pm.findPreference("sound");
 	        if (Preferences.getSound(getApplicationContext())) {soundCB.setChecked(true);}

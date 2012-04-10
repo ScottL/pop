@@ -8,3 +8,9 @@ Our priorities include:
 -improve
 -optimize
 -re-theme
+
+WHEN TRYING TO COMPLETELY REWRITE A METHOD, KEEP THE OLD METHOD THERE BUT WITH 
+A DIFFERENT NAME.. until you are sure the new method works
+
+ALSO document all changes you make with comments. the comments should stay until
+the change is determined to actually be good
